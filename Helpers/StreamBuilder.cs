@@ -4,9 +4,9 @@ using System.IO;
 using System.IO.Packaging;
 using System.Text;
 
-namespace NMC.Utils;
+namespace NMC.Helpers;
 
-public record FileStreamBuilder(FileMode fileMode = FileMode.Open, FileAccess fileAccess = FileAccess.ReadWrite)
+public record StreamBuilder(FileMode fileMode = FileMode.Open, FileAccess fileAccess = FileAccess.ReadWrite)
 {
     public FileStream GetFileStream(string filePath)
     {

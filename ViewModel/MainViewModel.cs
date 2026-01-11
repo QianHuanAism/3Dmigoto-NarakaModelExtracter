@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Dumpify;
 using Microsoft.Win32;
+using NMC.Helpers;
 using NMC.Model;
 using NMC.Utils;
 using System.Collections.ObjectModel;
@@ -108,7 +109,7 @@ public partial class MainViewModel : ObservableObject
         }
         Log.Info(":: 收集绘制调用对应的 VB 文件结束 ::");
         Log.Info(":: 开始分析 VB 文件::");
-        VBAnalyzer vbAnalyzer = new VBAnalyzer(FrameAnalysis.FrameAnalysisPath, _vbFiles, DrawIBList);
+        VBAnalyzer vbAnalyzer = new VBAnalyzer(FrameAnalysis.FrameAnalysisPath, _vbFiles);
         // TODO: 现在的想法是先从 vertex-data 开始读取，每读取一行就格式化一下字符串以语义名称为Key，数据为Value存入字典内，
         //       如果继续读取的语义的数据已经存在于字典，那就可以结束读取了，这样就拿到了正确的语义名称，再通过正确的语义去解析语义格式，
         //       但是这样会有一个小bug，如果遇到数据完全没有重复的 vb 文件，就会导致一直读取到文件末尾，虽然不怎么影响，但是还是需要解决此问题

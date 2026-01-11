@@ -1,10 +1,11 @@
 ﻿using Dumpify;
+using NMC.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NMC.Utils;
+namespace NMC.Helpers;
 
 public record VBCollector(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallDict)
 {

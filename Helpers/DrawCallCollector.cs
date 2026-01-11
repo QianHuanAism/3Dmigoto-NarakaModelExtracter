@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Controls.Ribbon;
 
-namespace NMC.Utils;
+namespace NMC.Helpers;
 
 public record DrawCallCollector(string frameAnalysis)
 {
