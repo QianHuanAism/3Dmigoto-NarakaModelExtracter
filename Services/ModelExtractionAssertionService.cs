@@ -39,7 +39,6 @@ public class ModelExtractionAssertionService : IModelExtractionAssertionService
             }
         }
 
-        bool isValid = frameAnalysis.IsValid;
         if (frameAnalysis.IsValid)
         {
             MessageHelper.Show("请先选择FrameAnalysis文件夹!");

@@ -27,11 +27,14 @@ public partial class MainViewModel : ObservableObject
         _extractionAssertionService = new ModelExtractionAssertionService();
     }
 
+    /// <summary>
+    /// 提取模型
+    /// </summary>
     [RelayCommand]
     private void ExtractModel()
     {
         // XXX: 仅为测试用例, 实际发布是会注释掉
-        ExtractTestCode();
+        //ExtractTestCode();
 
         Log.Info(":: 模型提取开始 ::");
 
@@ -45,6 +48,9 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 选择 FrameAnalysis 文件夹
+    /// </summary>
     [RelayCommand]
     private void SelectFrameAnalysisFolder()
     {
@@ -55,6 +61,7 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    // 测试代码
     private void ExtractTestCode()
     {
         if (DrawIBList.Count <= 0)
