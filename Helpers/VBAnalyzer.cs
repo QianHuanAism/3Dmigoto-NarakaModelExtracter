@@ -9,15 +9,16 @@ namespace NMC.Helpers;
 
 public record VBAnalyzer(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
 {
-    private StreamBuilder streamBuilder = new StreamBuilder();
     private VBStrideCollector strideCollector = new VBStrideCollector(frameAnalysis, vbFiles);
     private VBVertexCountCollector vertexCountCollector = new VBVertexCountCollector(frameAnalysis, vbFiles);
     private VBSemanticCollector semanticCollector = new VBSemanticCollector(frameAnalysis, vbFiles);
+    private VBSemanticBlockCollector semanticBlockCollector = new VBSemanticBlockCollector(frameAnalysis, vbFiles);
 
     public void Analyze()
     {
         var strides = strideCollector.GetStride();
         var vertexCounts = vertexCountCollector.GetVBVertexCount();
-        var semanticNameList = semanticCollector.GetValidSemantic();
+        var semanticList = semanticCollector.GetValidSemantic();
+        var semanticBlockList = semanticBlockCollector.GetValidSemanticBlock(semanticList);
     }
 }
