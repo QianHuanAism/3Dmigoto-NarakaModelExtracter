@@ -8,11 +8,11 @@ using System.Text.RegularExpressions;
 
 namespace NMC.Helpers;
 
-public class VBSemanticCollector(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
+public class VBSemanticCollector
 {
     private StreamBuilder streamBuilder = new StreamBuilder();
 
-    public List<Dictionary<string, Dictionary<string, string>>> GetValidSemantic()
+    public List<Dictionary<string, Dictionary<string, string>>> GetValidSemantic(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
     {
         List<Dictionary<string, Dictionary<string, string>>> fileSemanticList = new List<Dictionary<string, Dictionary<string, string>>>();
         foreach (var ibHash in vbFiles.Keys)

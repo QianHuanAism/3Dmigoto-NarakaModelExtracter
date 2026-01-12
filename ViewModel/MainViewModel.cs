@@ -9,6 +9,7 @@ using NMC.Services;
 using NMC.Utils;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Security.Policy;
 using System.Windows;
 
 namespace NMC;
@@ -16,15 +17,14 @@ namespace NMC;
 public partial class MainViewModel : ObservableObject
 {
     public ObservableCollection<DrawIB> DrawIBList { get; } = new ObservableCollection<DrawIB>();
+    public FrameAnalysis FrameAnalysis { get; } = new FrameAnalysis();
     private readonly IModelExtractionService _extractionService;
     private readonly IModelExtractionAssertionService _extractionAssertionService;
-    public FrameAnalysis FrameAnalysis { get; } = new FrameAnalysis();
-    
 
     public MainViewModel()
     {
-        _extractionService = new ModelExtractionService();
         _extractionAssertionService = new ModelExtractionAssertionService();
+        _extractionService = new ModelExtractionService();
     }
 
     /// <summary>
@@ -36,17 +36,20 @@ public partial class MainViewModel : ObservableObject
         // XXX: 仅为测试用例, 实际发布时会注释掉
         ExtractTestCode();
 
-        Log.Info(":: 模型提取开始 ::");
+        Log.Info("-", 66);
+        Log.Info("模型提取开始");
+        Log.Info($"FrameAnalysis文件夹路径: {FrameAnalysis.FrameAnalysisPath}");
 
         // 如果断言不通过, 则直接结束提取
-        if(!_extractionAssertionService.CanExtract(FrameAnalysis, DrawIBList))
+        if (!_extractionAssertionService.CanExtract(FrameAnalysis, DrawIBList))
         {
-            Log.Info(":: 模型提取失败, 提取逻辑结束 ::");
+            Log.Info("模型提取失败, 提取逻辑结束");
             return;
         }
 
         foreach (var drawIB in DrawIBList)
         {
+            Log.Info($"当前DrawIB: {drawIB.IBHash}");
             _extractionService.Extract(FrameAnalysis.FrameAnalysisPath!, drawIB.IBHash);
         }
     }
@@ -82,6 +85,6 @@ public partial class MainViewModel : ObservableObject
             });
         }
 
-        FrameAnalysis.FrameAnalysisPath = @"E:\XXMI Launcher\GIMI\FrameAnalysis-2026-01-08-203940";
+        FrameAnalysis.FrameAnalysisPath = @"E:\XXMI Launcher\GIMI\FrameAnalysis-2026-01-12-163352";
     }
 }

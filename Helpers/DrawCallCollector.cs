@@ -4,9 +4,9 @@ using System.Windows.Controls.Ribbon;
 
 namespace NMC.Helpers;
 
-public class DrawCallCollector(string frameAnalysis)
+public class DrawCallCollector
 {
-    public List<string>? CollectIBDrawCall(string ibHash)
+    public List<string>? CollectIBDrawCall(string frameAnalysis, string ibHash)
     {
         List<string>? drawCallList = new List<string>();
         foreach (var file in Directory.GetFiles(frameAnalysis).ToList())
@@ -26,6 +26,7 @@ public class DrawCallCollector(string frameAnalysis)
         return RemoveDuplicateDrawCall(drawCallList);
     }
 
+    // 这里只收集到最先出现的 DrawCall, 其余DrawCall 都可以舍弃
     private List<string> RemoveDuplicateDrawCall(List<string> source)
     {
         List<string> temp = new List<string>();
@@ -37,7 +38,7 @@ public class DrawCallCollector(string frameAnalysis)
             }
         }
 
-        temp.RemoveRange(1, temp.Count - 1);
+        //temp.RemoveRange(1, temp.Count - 1);
         return temp;
     }
 }

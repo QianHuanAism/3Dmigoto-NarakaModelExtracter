@@ -8,13 +8,13 @@ using System.Text;
 
 namespace NMC.Helpers;
 
-public class VBSemanticBlockCollector(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
+public class VBSemanticBlockCollector
 {
     private StreamBuilder streamBuilder = new StreamBuilder();
 
-    public List<Dictionary<string, List<string>>> GetValidSemanticBlock(List<Dictionary<string, Dictionary<string, string>>> semanticList)
+    public List<Dictionary<string, List<string>>> GetValidSemanticBlock
+        (string frameAnalysis, Dictionary<string, List<string>> vbFiles, List<Dictionary<string, Dictionary<string, string>>> semanticList)
     {
-        //semanticList.Dump();
         List<Dictionary<string, List<string>>> fileSemanticBlockList = new List<Dictionary<string, List<string>>>();
         foreach (var fileSemanticMap in semanticList)
         {
@@ -51,11 +51,17 @@ public class VBSemanticBlockCollector(string frameAnalysis, Dictionary<string, L
                         }
                     }
                 }
+
+                if(semanticBlockList.Count < 1)
+                {
+                    continue;
+                }
+
                 fileSemanticBlockMap.Add(file, semanticBlockList);
             }
             fileSemanticBlockList.Add(fileSemanticBlockMap);
         }
 
         return fileSemanticBlockList;
-    }    
+    }
 }

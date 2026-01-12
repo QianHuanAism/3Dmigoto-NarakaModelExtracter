@@ -1,4 +1,5 @@
 ﻿using NMC.Model;
+using NMC.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,17 +7,17 @@ using System.Text;
 
 namespace NMC.Helpers;
 
-public class VBVertexCountCollector(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
+public class VBVertexCountCollector
 {
     private StreamBuilder streamBuilder = new StreamBuilder();
 
     /// <summary>
     /// 获取VB文件中vertex count字段的值
     /// </summary>
-    public Dictionary<string, string> GetVBVertexCount()
+    public Dictionary<string, string> GetVBVertexCount(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
     {
+        Log.Info("收集 VB 文件的顶点数");
         Dictionary<string, string> vertexCounts = new Dictionary<string, string>();
-
         foreach (var ibHash in vbFiles.Keys)
         {
             foreach (var vbFile in vbFiles[ibHash])
@@ -29,7 +30,9 @@ public class VBVertexCountCollector(string frameAnalysis, Dictionary<string, Lis
                     {
                         if (line.StartsWith("vertex count:"))
                         {
-                            vertexCounts.Add(vbFile, line.Split(": ")[1]);
+                            string vertexCount = line.Split(": ")[1];
+                            vertexCounts.Add(vbFile, vertexCount);
+                            Log.Info($"文件: \"{vbFile}\" --> 顶点数: {vertexCount}");
                             break;
                         }
                     }

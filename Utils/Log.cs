@@ -14,6 +14,7 @@ public static class Log
     {
         LogList.Add($"[{TimeStamp} INFO] {content}");
     }
+
     public static void Info(string content, int count)
     {
         StringBuilder res = new StringBuilder();

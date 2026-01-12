@@ -7,42 +7,36 @@ using System.Text;
 
 namespace NMC.Helpers;
 
-public class VBCollector(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallDict)
+public class VBCollector(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallMap)
 {
     public Dictionary<string, List<string>>? CollectVBFile()
     {        
-        Dictionary<string, List<string>> vbFileDict = new Dictionary<string, List<string>>();
-        foreach (var ibHash in ibDrawCallDict.Keys)
+        Dictionary<string, List<string>> vbFiles = new Dictionary<string, List<string>>();
+        foreach (var ibHash in ibDrawCallMap.Keys)
         {
-            List<string> drawCalls = ibDrawCallDict[ibHash];
-            List<string> vbList = new List<string>();
+            List<string> drawCalls = ibDrawCallMap[ibHash];
+            List<string> vbFileList = new List<string>();
             foreach (var drawCall in drawCalls)
             {
                 foreach (var file in Directory.GetFiles(frameAnalysis).ToList())
                 {
                     if (file.Contains($"{drawCall}-vb") && Path.GetExtension(file).Equals(".txt"))
                     {
-                        vbList.Add(Path.GetFileName(file));
-                        Log.Info($"绘制调用: {drawCall} 对应的 VB 文件: {Path.GetFileName(file)}");
-                        if (!vbFileDict.ContainsKey(ibHash))
-                        {
-                            vbFileDict.Add(ibHash, vbList);
-                        }
+                        vbFileList.Add(Path.GetFileName(file));
+                        Log.Info($"绘制调用: {drawCall} --> {Path.GetFileName(file)}");
                     }
                 }
 
-                if (vbList.Count <= 0)
+                if (vbFileList.Count <= 0)
                 {
-                    Log.Info($"未找到绘制调用: {drawCall} 对应的 VB 文件，继续下一个绘制调用");
+                    Log.Err($"未找到绘制调用 {drawCall} 对应的 VB 文件提取失败, 开始提取下一个 DrawIB");
+                    return null;
                 }
+                if(!vbFiles.ContainsKey(ibHash))
+                    vbFiles.Add(ibHash, vbFileList);
             }
         }
 
-        if(vbFileDict.Count <= 0)
-        {
-            return null;
-        }
-
-        return vbFileDict;
+        return vbFiles;
     }
 }
