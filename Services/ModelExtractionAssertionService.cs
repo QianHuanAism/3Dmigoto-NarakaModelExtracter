@@ -29,14 +29,20 @@ public class ModelExtractionAssertionService : IModelExtractionAssertionService
             return false;
         }
 
+        bool hasValue = false;
         foreach (DrawIB drawIB in drawIBList)
         {
-            if (drawIB.IsValid)
+            if (!drawIB.IsValid)
             {
-                Log.Info("DrawIB为空, 提取结束!");
-                MessageHelper.Show("DrawIB不能为空!");
-                return false;
+                hasValue = true;
             }
+        }
+
+        if (!hasValue)
+        {
+            Log.Info("DrawIB为空, 提取结束!");
+            MessageHelper.Show("DrawIB不能为空!");
+            return false;
         }
 
          if (frameAnalysis.IsValid)

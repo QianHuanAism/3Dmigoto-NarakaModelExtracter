@@ -23,6 +23,11 @@ public class ModelExtractionService : IModelExtractionService
 
     public void Extract(string ibHash)
     {
+        // 考虑到可能有人在添加了以后又会删除, 所以可能即使通过了断言, 但是其实还是会有空字符串, 所以这里做二次判断  
+        if (string.IsNullOrEmpty(ibHash))
+        {
+            return;
+        }
         Log.Info($"开始收集DrawIB: {ibHash} 的绘制调用");
         // 用于存储当前 IB 对应的 DrawCall
         Dictionary<string, List<string>> ibDrawCallMap = new Dictionary<string, List<string>>();
@@ -40,10 +45,12 @@ public class ModelExtractionService : IModelExtractionService
 
 
         Log.Info("开始收集绘制调用对应的 VB 文件");
-        Dictionary<string, List<string>>? vbFiles = new Dictionary<string, List<string>>();
+        Dictionary<string, List<string>>? vbTxtFiles = new Dictionary<string, List<string>>();
+        Dictionary<string, List<string>>? vbBufFiles = new Dictionary<string, List<string>>();
         VBCollector vbCollector = new VBCollector(frameAnalysisPath!, ibDrawCallMap);
-        vbFiles = vbCollector.CollectVBFile();
-        if (vbFiles == null)
+        vbTxtFiles = vbCollector.CollectTxtVBFile();
+        vbBufFiles = vbCollector.CollectBufVBFile();
+        if (vbTxtFiles == null || vbBufFiles == null)
         {
             MessageHelper.Show($"未找到绘制调用对应的任何 VB 文件, 提取失败!", "错误", MessageBoxButton.OK, MessageBoxImage.Error);            
             return;
@@ -53,10 +60,10 @@ public class ModelExtractionService : IModelExtractionService
         
         Log.Info($"开始分析当前 DrawIB {ibHash} 对应的 VB 文件");
         
-        Dictionary<string, string>? strides = strideCollector.GetStride(frameAnalysisPath!, vbFiles);        
-        Dictionary<string, string>? vertexCounts = vertexCountCollector.GetVBVertexCount(frameAnalysisPath!, vbFiles);
-        List<Dictionary<string, Dictionary<string, string>>>? semanticList = semanticCollector.GetValidSemantic(frameAnalysisPath!, vbFiles);
-        List<Dictionary<string, List<string>>>? semanticBlockList = semanticBlockCollector.GetValidSemanticBlock(frameAnalysisPath!, vbFiles, semanticList);
+        Dictionary<string, string>? strides = strideCollector.GetStride(frameAnalysisPath!, vbTxtFiles);        
+        Dictionary<string, string>? vertexCounts = vertexCountCollector.GetVBVertexCount(frameAnalysisPath!, vbTxtFiles);
+        List<Dictionary<string, Dictionary<string, string>>>? semanticList = semanticCollector.GetValidSemantic(frameAnalysisPath!, vbTxtFiles);
+        List<Dictionary<string, List<string>>>? semanticBlockList = semanticBlockCollector.GetValidSemanticBlock(frameAnalysisPath!, vbTxtFiles, semanticList);
 
         Log.Info($"当前 DrawIB {ibHash} 对应的 VB 文件分析结束");
         Log.Info("-", 66);
@@ -64,9 +71,10 @@ public class ModelExtractionService : IModelExtractionService
         Log.Info($"开始分析 \"log.txt\" 文件");
         string logFilePath = Path.Combine(frameAnalysisPath!, "log.txt");
         VBHashCollector vbHashCollector = new VBHashCollector();
-        Dictionary<string, string>? drawCallToVBHashMap = vbHashCollector.CollectVBHash(vbFiles);
+        Dictionary<string, string>? drawCallToVBHashMap = vbHashCollector.CollectVB0Hash(vbTxtFiles);
         LogFileAnalyzer logFileAnalyzer = new LogFileAnalyzer(logFilePath);
-        logFileAnalyzer.AnalyzeLog(drawCallToVBHashMap);
+        List<string> cstFileList = new List<string>();
+        cstFileList = logFileAnalyzer.AnalyzeLog(drawCallToVBHashMap);
         Log.Info($"分析 \"log.txt\" 文件结束");
         Log.Info("-", 66);
     }

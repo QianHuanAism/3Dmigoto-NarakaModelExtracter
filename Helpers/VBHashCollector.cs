@@ -8,7 +8,7 @@ namespace NMC.Helpers;
 
 public class VBHashCollector
 {
-    public Dictionary<string, string> CollectVBHash(Dictionary<string, List<string>> vbFiles)
+    public Dictionary<string, string> CollectVB0Hash(Dictionary<string, List<string>> vbFiles)
     {
         Dictionary<string, string> drawCallToVBHashMap = new Dictionary<string, string>();
         foreach (var ibHash in vbFiles.Keys)
