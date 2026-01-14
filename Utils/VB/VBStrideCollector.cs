@@ -1,15 +1,15 @@
-﻿using NMC.Model;
-using NMC.Utils;
+﻿using NMC.Helpers;
+using NMC.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NMC.Helpers;
+namespace NMC.Utils.VB;
 
 public class VBStrideCollector
 {
-    private StreamBuilder streamBuilder = new StreamBuilder();
+    private StreamHelper streamBuilder = new StreamHelper();
 
     /// <summary>
     /// 获取VB文件中stride字段的值

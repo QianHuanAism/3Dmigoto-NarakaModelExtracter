@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace NMC.Utils;
+namespace NMC.Helpers;
 
 public static class Log
 {

@@ -1,15 +1,15 @@
 ﻿using Dumpify;
-using NMC.Utils;
+using NMC.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace NMC.Helpers;
+namespace NMC.Utils.VB;
 
-public class VBCollector(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallMap)
+public class VBCollector
 {
-    public Dictionary<string, List<string>>? CollectTxtVBFile()
+    public Dictionary<string, List<string>>? CollectTxtVBFile(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallMap)
     {        
         Dictionary<string, List<string>> vbFiles = new Dictionary<string, List<string>>();
         foreach (var ibHash in ibDrawCallMap.Keys)
@@ -40,7 +40,7 @@ public class VBCollector(string frameAnalysis, Dictionary<string, List<string>> 
         return vbFiles;
     }
 
-    public Dictionary<string, List<string>>? CollectBufVBFile()
+    public Dictionary<string, List<string>>? CollectBufVBFile(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallMap)
     {
         Dictionary<string, List<string>> vbFiles = new Dictionary<string, List<string>>();
         foreach (var ibHash in ibDrawCallMap.Keys)

@@ -1,4 +1,5 @@
 ﻿using Dumpify;
+using NMC.Helpers;
 using NMC.Model;
 using System;
 using System.Collections.Generic;
@@ -6,13 +7,18 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NMC.Helpers;
+namespace NMC.Utils.VB;
 
-public class VBSemanticCollector
+public class VBValidElementCollector
 {
-    private StreamBuilder streamBuilder = new StreamBuilder();
+    private StreamHelper streamBuilder;
 
-    public List<Dictionary<string, Dictionary<string, string>>> GetValidSemantic(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
+    public VBValidElementCollector()
+    {
+        streamBuilder = new StreamHelper();
+    }
+
+    public List<Dictionary<string, Dictionary<string, string>>> GetVBValidElementList(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
     {
         List<Dictionary<string, Dictionary<string, string>>> fileSemanticList = new List<Dictionary<string, Dictionary<string, string>>>();
         foreach (var ibHash in vbFiles.Keys)

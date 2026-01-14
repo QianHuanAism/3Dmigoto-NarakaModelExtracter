@@ -1,4 +1,5 @@
 ﻿using Dumpify;
+using NMC.Helpers;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -6,13 +7,13 @@ using System.IO;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
-namespace NMC.Helpers;
+namespace NMC.Utils.VB;
 
-public class VBSemanticBlockCollector
+public class VBInputElementCollector
 {
-    private StreamBuilder streamBuilder = new StreamBuilder();
+    private StreamHelper streamBuilder = new StreamHelper();
 
-    public List<Dictionary<string, List<string>>> GetValidSemanticBlock
+    public List<Dictionary<string, List<string>>> GetVBInputElementList
         (string frameAnalysis, Dictionary<string, List<string>> vbFiles, List<Dictionary<string, Dictionary<string, string>>> semanticList)
     {
         List<Dictionary<string, List<string>>> fileSemanticBlockList = new List<Dictionary<string, List<string>>>();

@@ -6,7 +6,6 @@ using NMC.Core;
 using NMC.Helpers;
 using NMC.Model;
 using NMC.Services;
-using NMC.Utils;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Security.Policy;
@@ -59,6 +58,19 @@ public partial class MainViewModel : ObservableObject
         if (folderDialog.ShowDialog() == true)
         {
             FrameAnalysis.FrameAnalysisPath = folderDialog.FolderName;
+        }
+    }
+
+    /// <summary>
+    /// 选择 FrameAnalysis 文件夹
+    /// </summary>
+    [RelayCommand]
+    private void SelectOutputFolder()
+    {
+        OpenFolderDialog folderDialog = new OpenFolderDialog();
+        if (folderDialog.ShowDialog() == true)
+        {
+            FrameAnalysis.OutputPath = folderDialog.FolderName;
         }
     }
 

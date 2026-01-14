@@ -1,4 +1,5 @@
 ﻿using Dumpify;
+using NMC.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NMC.Helpers;
+namespace NMC.Utils.Others;
 
 public enum StatusSettingMethod
 {
@@ -20,7 +21,7 @@ public class LogFileAnalyzer
 {
     private string _logFilePath;
     private List<string> logFileContentList;
-    private StreamBuilder? streamBuilder;
+    private StreamHelper? streamBuilder;
     private StatusSettingMethod currentStatus;
 
     public LogFileAnalyzer(string logFilePath)
@@ -30,7 +31,7 @@ public class LogFileAnalyzer
         // 在初始化时就将Log文件的内容读进内存中, 避免每次分析都要重新读取文件
         if (File.Exists(logFilePath))
         {
-            streamBuilder = new StreamBuilder();
+            streamBuilder = new StreamHelper();
             using var fs = streamBuilder.GetFileStream(logFilePath);
             StreamReader sr = new StreamReader(fs);
             string? line;

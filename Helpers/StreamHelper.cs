@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NMC.Helpers;
 
-public record StreamBuilder(FileMode fileMode = FileMode.Open, FileAccess fileAccess = FileAccess.ReadWrite)
+public record StreamHelper(FileMode fileMode = FileMode.Open, FileAccess fileAccess = FileAccess.ReadWrite)
 {
     public FileStream GetFileStream(string filePath)
     {

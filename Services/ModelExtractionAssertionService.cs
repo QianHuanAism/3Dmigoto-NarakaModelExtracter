@@ -2,7 +2,6 @@
 using NMC.Core;
 using NMC.Helpers;
 using NMC.Model;
-using NMC.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -56,6 +55,13 @@ public class ModelExtractionAssertionService : IModelExtractionAssertionService
         {
             MessageHelper.Show($"请选择正确的FrameAnalysis文件夹!{Environment.NewLine} * FrameAnalysis文件夹名必须以\'FrameAnalysis-\'开头");
             Log.Info("选择的 FrameAnalysis 文件夹不符合规范，提取结束!");
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(frameAnalysis.OutputPath) || !Directory.Exists(frameAnalysis.OutputPath))
+        {
+            MessageHelper.Show("请选择正确输出文件夹!");
+            Log.Info(" FrameAnalysisPath 为空或不存在, 提取结束!");
             return false;
         }
 
