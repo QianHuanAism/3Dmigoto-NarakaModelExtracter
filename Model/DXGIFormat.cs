@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NMC.Model;
+﻿namespace NMC.Model;
 
 public class DXGIFormat
 {

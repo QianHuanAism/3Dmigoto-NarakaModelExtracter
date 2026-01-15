@@ -1,15 +1,14 @@
 ﻿using NMC.Helpers;
-using NMC.Model;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NMC.Utils.IB;
 
 public class IBFileCollector
 {
-    public Dictionary<string, List<string>> CollectTxtIBFile(string frameAnalysisPath, Dictionary<string, List<string>> ibDrawCallMap)
+    public Dictionary<string, List<string>> CollectTxtIBFile(
+        string frameAnalysisPath,
+        Dictionary<string, List<string>> ibDrawCallMap
+    )
     {
         Dictionary<string, List<string>> ibFiles = new Dictionary<string, List<string>>();
         foreach (var ibHash in ibDrawCallMap.Keys)
@@ -29,7 +28,9 @@ public class IBFileCollector
 
                 if (vbFileList.Count <= 0)
                 {
-                    Log.Err($"未找到绘制调用 {drawCall} 对应的 IB 文件提取失败, 开始提取下一个 DrawIB");
+                    Log.Err(
+                        $"未找到绘制调用 {drawCall} 对应的 IB 文件提取失败, 开始提取下一个 DrawIB"
+                    );
                     return null;
                 }
                 if (!ibFiles.ContainsKey(ibHash))
@@ -40,7 +41,10 @@ public class IBFileCollector
         return ibFiles;
     }
 
-    public Dictionary<string, List<string>> CollectBufIBFile(string frameAnalysisPath, Dictionary<string, List<string>> ibDrawCallMap)
+    public Dictionary<string, List<string>> CollectBufIBFile(
+        string frameAnalysisPath,
+        Dictionary<string, List<string>> ibDrawCallMap
+    )
     {
         Dictionary<string, List<string>> ibFiles = new Dictionary<string, List<string>>();
         foreach (var ibHash in ibDrawCallMap.Keys)
@@ -60,7 +64,9 @@ public class IBFileCollector
 
                 if (ibFileList.Count <= 0)
                 {
-                    Log.Err($"未找到绘制调用 {drawCall} 对应的 IB 文件提取失败, 开始提取下一个 DrawIB");
+                    Log.Err(
+                        $"未找到绘制调用 {drawCall} 对应的 IB 文件提取失败, 开始提取下一个 DrawIB"
+                    );
                     return null;
                 }
                 if (!ibFiles.ContainsKey(ibHash))

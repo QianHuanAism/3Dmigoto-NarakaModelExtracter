@@ -1,9 +1,6 @@
-﻿using Dumpify;
-using NMC.Helpers;
+﻿using NMC.Helpers;
 using NMC.Model;
-using System.Drawing;
 using System.IO;
-using System.Windows;
 
 namespace NMC.Utils.FMT;
 
@@ -26,7 +23,7 @@ public class FmtBuilder
         Dictionary<string, List<string>> vbBufFiles,
         Dictionary<string, List<string>> ibTxtFiles,
         string frameAnalysisPath
-        )
+    )
     {
         this.vbStrides = vbStrides;
         this.cstStrides = cstStrides;
@@ -45,10 +42,18 @@ public class FmtBuilder
         vbInputElementList.Clear();
         vbInputElementList.Add(fixedFileElementMap);
         // 合并输入元素
-        List<string> totalInputElementList = MergeInputElement(vbInputElementList, cstInputElementList);
+        List<string> totalInputElementList = MergeInputElement(
+            vbInputElementList,
+            cstInputElementList
+        );
         string stride = GetTotalStride(totalInputElementList);
-        Dictionary<string, string> alignedByteOffsetMap = CalcAlignedByteOffset(totalInputElementList);
-        totalInputElementList = RebuildAlignedByteOffset(totalInputElementList, alignedByteOffsetMap);
+        Dictionary<string, string> alignedByteOffsetMap = CalcAlignedByteOffset(
+            totalInputElementList
+        );
+        totalInputElementList = RebuildAlignedByteOffset(
+            totalInputElementList,
+            alignedByteOffsetMap
+        );
         AddElementIndex(ref totalInputElementList);
         AddSpace(ref totalInputElementList);
         totalInputElementList = [.. GetIBFormat(), .. totalInputElementList];
@@ -57,9 +62,10 @@ public class FmtBuilder
         return totalInputElementList;
     }
 
-    
-
-    private List<string> MergeInputElement(List<Dictionary<string, List<string>>> vbInputElementList, List<Dictionary<string, List<string>>> cstInputElementList)
+    private List<string> MergeInputElement(
+        List<Dictionary<string, List<string>>> vbInputElementList,
+        List<Dictionary<string, List<string>>> cstInputElementList
+    )
     {
         List<string> totalInputElementList = new List<string>();
         foreach (var fileElementMap in vbInputElementList)
@@ -82,7 +88,8 @@ public class FmtBuilder
         {
             if (totalInputElementList[i].StartsWith("InputSlot: "))
             {
-                totalInputElementList[i] = totalInputElementList[i].Replace(totalInputElementList[i], "InputSlot: 0");
+                totalInputElementList[i] = totalInputElementList[i]
+                    .Replace(totalInputElementList[i], "InputSlot: 0");
             }
         }
 
@@ -104,14 +111,18 @@ public class FmtBuilder
                 start++;
                 if (start == 0)
                 {
-                    current = DXGIFormat.DXGIFormapMaps[totalInputElementList[i + 2].Split(": ")[1]];
+                    current = DXGIFormat.DXGIFormapMaps[
+                        totalInputElementList[i + 2].Split(": ")[1]
+                    ];
                     byteOffset = byteOffset + previousTotal;
                     previousTotal = current;
                     alignedByteOffsetMap.Add(inputElement.Split(": ")[1], byteOffset.ToString());
                 }
                 else
                 {
-                    current = DXGIFormat.DXGIFormapMaps[totalInputElementList[i + 2].Split(": ")[1]];
+                    current = DXGIFormat.DXGIFormapMaps[
+                        totalInputElementList[i + 2].Split(": ")[1]
+                    ];
                     byteOffset = byteOffset + previousTotal;
                     previousTotal = current;
                     alignedByteOffsetMap.Add(inputElement.Split(": ")[1], byteOffset.ToString());
@@ -121,7 +132,10 @@ public class FmtBuilder
         return alignedByteOffsetMap;
     }
 
-    private List<string> RebuildAlignedByteOffset(List<string> totalInputElementList, Dictionary<string, string> alignedByteOffsetList)
+    private List<string> RebuildAlignedByteOffset(
+        List<string> totalInputElementList,
+        Dictionary<string, string> alignedByteOffsetList
+    )
     {
         int index = 0;
         List<string> newTotalInputElementList = new List<string>();
@@ -132,7 +146,8 @@ public class FmtBuilder
             {
                 if (inputElement.StartsWith($"SemanticName: {elementName}"))
                 {
-                    newTotalInputElementList[index + 4] = $"AlignedByteOffset: {alignedByteOffsetList[elementName]}";
+                    newTotalInputElementList[index + 4] =
+                        $"AlignedByteOffset: {alignedByteOffsetList[elementName]}";
                 }
             }
             index++;
@@ -158,7 +173,6 @@ public class FmtBuilder
     private void AddElementIndex(ref List<string> totalInputElementList)
     {
         List<string> tempInputElemntList = new List<string>();
-        //totalInputElementList.Dump();
 
         for (int i = 0; i < totalInputElementList.Count; i++)
         {
@@ -183,7 +197,8 @@ public class FmtBuilder
         {
             if (tempInputElemntList[i].StartsWith("element["))
             {
-                tempInputElemntList[i] = tempInputElemntList[i].Replace(tempInputElemntList[i], $"element[{elementIndex}]:");
+                tempInputElemntList[i] = tempInputElemntList[i]
+                    .Replace(tempInputElemntList[i], $"element[{elementIndex}]:");
                 elementIndex++;
             }
         }
@@ -213,7 +228,9 @@ public class FmtBuilder
         List<string> ibFormat = new List<string>();
         foreach (var ibHash in ibTxtFiles.Keys)
         {
-            using var fs = new StreamHelper().GetFileStream(Path.Combine(frameAnalysisPath, ibTxtFiles[ibHash][0]));
+            using var fs = new StreamHelper().GetFileStream(
+                Path.Combine(frameAnalysisPath, ibTxtFiles[ibHash][0])
+            );
             var sr = new StreamReader(fs);
             string topology = "";
             for (int i = 0; i < 4; i++)
@@ -225,7 +242,7 @@ public class FmtBuilder
             string dataFormat = sr.ReadLine();
             ibFormat.Add(dataFormat);
         }
-        
+
         return ibFormat;
     }
 }

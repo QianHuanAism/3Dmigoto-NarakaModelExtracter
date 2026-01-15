@@ -1,11 +1,5 @@
-﻿using Dumpify;
-using NMC.Helpers;
-using System;
-using System.Collections.Generic;
+﻿using NMC.Helpers;
 using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Policy;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NMC.Utils.Others;
@@ -35,7 +29,7 @@ public class LogFileAnalyzer
             using var fs = streamBuilder.GetFileStream(logFilePath);
             StreamReader sr = new StreamReader(fs);
             string? line;
-            while((line = sr.ReadLine()) != null)
+            while ((line = sr.ReadLine()) != null)
             {
                 logFileContentList.Add(line);
             }
@@ -52,7 +46,7 @@ public class LogFileAnalyzer
                 cstDrawCalls.Add(drawCallVBHashMap[ibDrawCall], cstDrawCallList);
         }
 
-        List<Dictionary<string, string>> cstHashList = new List<Dictionary<string, string>>();        
+        List<Dictionary<string, string>> cstHashList = new List<Dictionary<string, string>>();
         cstHashList = GetCSTHash(cstDrawCalls);
         List<string> cstFileList = new List<string>();
         cstFileList = GetCSTFile(cstDrawCalls, cstHashList);
@@ -60,7 +54,10 @@ public class LogFileAnalyzer
         return cstFileList;
     }
 
-    public List<string> GetCSTFile(Dictionary<string, List<string>> cstDrawCalls, List<Dictionary<string, string>> cstHashList)
+    public List<string> GetCSTFile(
+        Dictionary<string, List<string>> cstDrawCalls,
+        List<Dictionary<string, string>> cstHashList
+    )
     {
         List<string> cstFileList = new List<string>();
         foreach (var vbHash in cstDrawCalls.Keys)
@@ -89,7 +86,9 @@ public class LogFileAnalyzer
         return cstFileList;
     }
 
-    public List<Dictionary<string, string>> GetCSTHash(Dictionary<string, List<string>> cstDrawCalls)
+    public List<Dictionary<string, string>> GetCSTHash(
+        Dictionary<string, List<string>> cstDrawCalls
+    )
     {
         List<Dictionary<string, string>> cstHashList = new List<Dictionary<string, string>>();
         foreach (var vbHash in cstDrawCalls.Keys)
@@ -122,7 +121,10 @@ public class LogFileAnalyzer
                         }
 
                         // 进一步过滤掉没有指定DrawCall的着色器资源试图
-                        if (currentStatus != StatusSettingMethod.None && !content.StartsWith($"{vbDrawCall} {funcName}"))
+                        if (
+                            currentStatus != StatusSettingMethod.None
+                            && !content.StartsWith($"{vbDrawCall} {funcName}")
+                        )
                         {
                             currentStatus = StatusSettingMethod.None;
                             // 如果不是任意一种状态, 并且不是指定的DrawCall, 则跳过这一行
@@ -138,11 +140,11 @@ public class LogFileAnalyzer
                         var resMacth = Regex.Match(content, reResource);
                         if (resMacth.Success)
                         {
-                            if(currentStatus == StatusSettingMethod.SRV)
+                            if (currentStatus == StatusSettingMethod.SRV)
                             {
                                 var slotIdx = int.Parse(resMacth.Groups["1"].Value);
                                 var hash = resMacth.Groups["2"].Value.TrimStart();
-                                if(slotIdx < 2)
+                                if (slotIdx < 2)
                                 {
                                     if (!resourcesMap.ContainsKey($"t{slotIdx}"))
                                     {
@@ -173,7 +175,7 @@ public class LogFileAnalyzer
             if (Regex.Match(content, pattern).Success)
             {
                 string cstDrawCall = Regex.Match(content, pattern).Value.Substring(0, 6);
-                if(!cstDrawCallList.Contains(cstDrawCall))
+                if (!cstDrawCallList.Contains(cstDrawCall))
                     cstDrawCallList.Add(cstDrawCall);
             }
         }

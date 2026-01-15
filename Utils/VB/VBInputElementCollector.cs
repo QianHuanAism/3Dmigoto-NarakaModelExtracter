@@ -1,11 +1,5 @@
-﻿using Dumpify;
-using NMC.Helpers;
-using Spectre.Console;
-using System;
-using System.Collections.Generic;
+﻿using NMC.Helpers;
 using System.IO;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 
 namespace NMC.Utils.VB;
 
@@ -13,13 +7,18 @@ public class VBInputElementCollector
 {
     private StreamHelper streamBuilder = new StreamHelper();
 
-    public List<Dictionary<string, List<string>>> GetVBInputElementList
-        (string frameAnalysis, Dictionary<string, List<string>> vbFiles, List<Dictionary<string, Dictionary<string, string>>> semanticList)
+    public List<Dictionary<string, List<string>>> GetVBInputElementList(
+        string frameAnalysis,
+        Dictionary<string, List<string>> vbFiles,
+        List<Dictionary<string, Dictionary<string, string>>> semanticList
+    )
     {
-        List<Dictionary<string, List<string>>> fileSemanticBlockList = new List<Dictionary<string, List<string>>>();
+        List<Dictionary<string, List<string>>> fileSemanticBlockList =
+            new List<Dictionary<string, List<string>>>();
         foreach (var fileSemanticMap in semanticList)
         {
-            Dictionary<string, List<string>> fileSemanticBlockMap = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> fileSemanticBlockMap =
+                new Dictionary<string, List<string>>();
             foreach (var file in fileSemanticMap.Keys)
             {
                 string vbFile = Path.Combine(frameAnalysis, file);
@@ -41,8 +40,11 @@ public class VBInputElementCollector
                 {
                     for (int i = 0; i < contentList.Count; i++)
                     {
-                        if (contentList[i].Equals($"SemanticName: {semanticName}")
-                            && contentList[i + 1].Equals($"SemanticIndex: {fileSemanticMap[file][semanticName]}"))
+                        if (
+                            contentList[i].Equals($"SemanticName: {semanticName}")
+                            && contentList[i + 1]
+                                .Equals($"SemanticIndex: {fileSemanticMap[file][semanticName]}")
+                        )
                         {
                             int offset = i + 6;
                             for (int j = i; j <= offset; j++)
@@ -53,7 +55,7 @@ public class VBInputElementCollector
                     }
                 }
 
-                if(semanticBlockList.Count < 1)
+                if (semanticBlockList.Count < 1)
                 {
                     continue;
                 }

@@ -1,6 +1,4 @@
 ﻿using NMC.Helpers;
-using System.Configuration;
-using System.Data;
 using System.IO;
 using System.Windows;
 
@@ -14,6 +12,11 @@ namespace NMC
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
+
+            if (Log.LogList.Count <= 0)
+            {
+                return;
+            }
 
             string currentDir = Directory.GetCurrentDirectory();
             string logDir = Path.Combine(currentDir, "Logs");

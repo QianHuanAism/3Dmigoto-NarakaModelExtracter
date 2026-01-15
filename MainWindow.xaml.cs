@@ -1,7 +1,5 @@
-﻿using NMC.Utils;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace NMC
 {
@@ -14,7 +12,12 @@ namespace NMC
         {
             InitializeComponent();
             this.DataContext = new MainViewModel();
-            Console.Clear();
+        }
+
+        private void backgroundVideo_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            backgroundVideo.Position = TimeSpan.Zero;
+            backgroundVideo.Play();
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using NMC.Helpers;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NMC.Utils.CST;
 
@@ -17,7 +14,10 @@ public class CSTStrideCollector
         streamBuilder = new StreamHelper();
     }
 
-    public Dictionary<string, string> GetCSTStride(Dictionary<string, string> vertexCounts, List<string> cstFileList)
+    public Dictionary<string, string> GetCSTStride(
+        Dictionary<string, string> vertexCounts,
+        List<string> cstFileList
+    )
     {
         Dictionary<string, string> cstStrideMap = new Dictionary<string, string>();
         foreach (var cstFile in cstFileList)
@@ -25,7 +25,9 @@ public class CSTStrideCollector
             foreach (var vbFile in vertexCounts.Keys)
             {
                 string vertexCount = vertexCounts[vbFile];
-                using var fs = streamBuilder.GetFileStream(Path.Combine(frameAnalysisPath, cstFile));
+                using var fs = streamBuilder.GetFileStream(
+                    Path.Combine(frameAnalysisPath, cstFile)
+                );
                 long fileSize = fs.Length;
                 string cstStride = (fileSize / int.Parse(vertexCount)).ToString();
                 if (!cstStrideMap.ContainsKey(cstFile))

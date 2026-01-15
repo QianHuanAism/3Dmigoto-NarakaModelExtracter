@@ -1,16 +1,15 @@
-﻿using Dumpify;
-using NMC.Helpers;
-using System;
-using System.Collections.Generic;
+﻿using NMC.Helpers;
 using System.IO;
-using System.Text;
 
 namespace NMC.Utils.VB;
 
 public class VBCollector
 {
-    public Dictionary<string, List<string>>? CollectTxtVBFile(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallMap)
-    {        
+    public Dictionary<string, List<string>>? CollectTxtVBFile(
+        string frameAnalysis,
+        Dictionary<string, List<string>> ibDrawCallMap
+    )
+    {
         Dictionary<string, List<string>> vbFiles = new Dictionary<string, List<string>>();
         foreach (var ibHash in ibDrawCallMap.Keys)
         {
@@ -29,10 +28,12 @@ public class VBCollector
 
                 if (vbFileList.Count <= 0)
                 {
-                    Log.Err($"未找到绘制调用 {drawCall} 对应的 VB 文件提取失败, 开始提取下一个 DrawIB");
+                    Log.Err(
+                        $"未找到绘制调用 {drawCall} 对应的 VB 文件提取失败, 开始提取下一个 DrawIB"
+                    );
                     return null;
                 }
-                if(!vbFiles.ContainsKey(ibHash))
+                if (!vbFiles.ContainsKey(ibHash))
                     vbFiles.Add(ibHash, vbFileList);
             }
         }
@@ -40,7 +41,10 @@ public class VBCollector
         return vbFiles;
     }
 
-    public Dictionary<string, List<string>>? CollectBufVBFile(string frameAnalysis, Dictionary<string, List<string>> ibDrawCallMap)
+    public Dictionary<string, List<string>>? CollectBufVBFile(
+        string frameAnalysis,
+        Dictionary<string, List<string>> ibDrawCallMap
+    )
     {
         Dictionary<string, List<string>> vbFiles = new Dictionary<string, List<string>>();
         foreach (var ibHash in ibDrawCallMap.Keys)
@@ -60,7 +64,9 @@ public class VBCollector
 
                 if (vbFileList.Count <= 0)
                 {
-                    Log.Err($"未找到绘制调用 {drawCall} 对应的 VB 文件提取失败, 开始提取下一个 DrawIB");
+                    Log.Err(
+                        $"未找到绘制调用 {drawCall} 对应的 VB 文件提取失败, 开始提取下一个 DrawIB"
+                    );
                     return null;
                 }
                 if (!vbFiles.ContainsKey(ibHash))

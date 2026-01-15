@@ -1,10 +1,5 @@
-﻿using Dumpify;
-using NMC.Helpers;
-using NMC.Model;
-using System;
-using System.Collections.Generic;
+﻿using NMC.Helpers;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NMC.Utils.VB;
@@ -18,12 +13,17 @@ public class VBValidElementCollector
         streamBuilder = new StreamHelper();
     }
 
-    public List<Dictionary<string, Dictionary<string, string>>> GetVBValidElementList(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
+    public List<Dictionary<string, Dictionary<string, string>>> GetVBValidElementList(
+        string frameAnalysis,
+        Dictionary<string, List<string>> vbFiles
+    )
     {
-        List<Dictionary<string, Dictionary<string, string>>> fileSemanticList = new List<Dictionary<string, Dictionary<string, string>>>();
+        List<Dictionary<string, Dictionary<string, string>>> fileSemanticList =
+            new List<Dictionary<string, Dictionary<string, string>>>();
         foreach (var ibHash in vbFiles.Keys)
         {
-            Dictionary<string, Dictionary<string, string>> fileSemanticMap = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, Dictionary<string, string>> fileSemanticMap =
+                new Dictionary<string, Dictionary<string, string>>();
             foreach (var file in vbFiles[ibHash])
             {
                 var vbFile = Path.Combine(frameAnalysis, file);
@@ -33,11 +33,11 @@ public class VBValidElementCollector
                 List<string> contentList = new List<string>();
                 Dictionary<string, string> semanticToValueMap = new Dictionary<string, string>();
                 string? line;
-                while((line = sr.ReadLine()) != null)
+                while ((line = sr.ReadLine()) != null)
                 {
-                    if(line.StartsWith("vertex-data:"))
+                    if (line.StartsWith("vertex-data:"))
                     {
-                        while((line = sr.ReadLine()) != null)
+                        while ((line = sr.ReadLine()) != null)
                         {
                             if (string.IsNullOrEmpty(line))
                                 continue;
@@ -52,7 +52,10 @@ public class VBValidElementCollector
                     string semanticName = content.Split(": ")[0].Split(" ")[1];
                     string semanticValue = content.Split(": ")[1];
 
-                    if (semanticToValueMap.ContainsKey(semanticName) || semanticToValueMap.ContainsValue(semanticValue))
+                    if (
+                        semanticToValueMap.ContainsKey(semanticName)
+                        || semanticToValueMap.ContainsValue(semanticValue)
+                    )
                         break;
 
                     semanticToValueMap.Add(semanticName, semanticValue);
@@ -67,17 +70,19 @@ public class VBValidElementCollector
         return fileSemanticList;
     }
 
-    private Dictionary<string, string> GetSeamanticIndex(Dictionary<string, string> semanticToValueMap)
+    private Dictionary<string, string> GetSeamanticIndex(
+        Dictionary<string, string> semanticToValueMap
+    )
     {
         Dictionary<string, string> semanticIndexMap = new Dictionary<string, string>();
         string pattern = @"\d+\b";
         foreach (var semanticName in semanticToValueMap.Keys)
         {
             bool isSuccess = Regex.Match(semanticName, pattern).Success;
-            if(isSuccess)
+            if (isSuccess)
             {
                 string semanticIndex = Regex.Match(semanticName, pattern).Value;
-                
+
                 semanticIndexMap.Add(semanticName, semanticIndex);
             }
             else

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Windows.Media;
 
 namespace NMC.Utils.FMT;
 
@@ -27,9 +26,6 @@ public class FmtWriter
 
             File.WriteAllLines(filePath, fmtContentList);
         }
-        catch
-        {
-
-        }
+        catch { }
     }
 }

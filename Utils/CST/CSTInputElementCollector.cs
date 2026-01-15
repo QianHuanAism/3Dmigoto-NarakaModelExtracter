@@ -1,19 +1,19 @@
-﻿using Dumpify;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NMC.Utils.CST;
+﻿namespace NMC.Utils.CST;
 
 public class CSTInputElementCollector
 {
-    public List<Dictionary<string, List<string>>> GetCSTInputElementList(List<string> cstFiles, Dictionary<string, string> cstStrides)
+    public List<Dictionary<string, List<string>>> GetCSTInputElementList(
+        List<string> cstFiles,
+        Dictionary<string, string> cstStrides
+    )
     {
-        List<Dictionary<string, List<string>>> cstInputElementList = new List<Dictionary<string, List<string>>>();
+        List<Dictionary<string, List<string>>> cstInputElementList =
+            new List<Dictionary<string, List<string>>>();
         foreach (var cstFile in cstStrides.Keys)
         {
             string cstStride = cstStrides[cstFile];
-            Dictionary<string, List<string>> fileInputElementMap = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> fileInputElementMap =
+                new Dictionary<string, List<string>>();
             switch (cstStride)
             {
                 case "32":
@@ -35,21 +35,21 @@ public class CSTInputElementCollector
         Dictionary<string, string> blendFormatMap = new Dictionary<string, string>()
         {
             { "BLENDWEIGHTS", "R32G32B32A32_FLOAT" },
-            { "BLENDINDICES", "R32G32B32A32_UINT" }
+            { "BLENDINDICES", "R32G32B32A32_UINT" },
         };
 
         foreach (var attributeName in blendFormatMap.Keys)
         {
             Dictionary<string, string> attributeFormatMap = new Dictionary<string, string>()
-        {
-            {"SemanticName", $"{attributeName}" },
-            {"SemanticIndex", "0" },
-            {"Format", $"{blendFormatMap[attributeName]}" },
-            {"InputSlot", "0" },
-            {"AlignedByteOffset", "0" },
-            {"InputSlotClass", "per-vertex" },
-            {"InstanceDataStepRate", "0" },
-        };
+            {
+                { "SemanticName", $"{attributeName}" },
+                { "SemanticIndex", "0" },
+                { "Format", $"{blendFormatMap[attributeName]}" },
+                { "InputSlot", "0" },
+                { "AlignedByteOffset", "0" },
+                { "InputSlotClass", "per-vertex" },
+                { "InstanceDataStepRate", "0" },
+            };
 
             foreach (var attribute in attributeFormatMap.Keys)
             {

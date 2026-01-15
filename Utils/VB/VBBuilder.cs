@@ -1,15 +1,7 @@
-﻿using System.Diagnostics;
+﻿using NMC.Helpers;
 using System.IO;
-using NMC.Helpers;
 
 namespace NMC.Utils.VB;
-
-public enum WriteState
-{
-    VB0,
-    VB1,
-    VB2,
-}
 
 public class VBBuilder
 {
@@ -19,7 +11,6 @@ public class VBBuilder
     private Dictionary<string, string> cstStrides;
     private Dictionary<string, string> vbVertexCounts;
     private string ibHash;
-    private WriteState writeState = WriteState.VB0;
 
     public VBBuilder(
         string writePath,
@@ -67,9 +58,6 @@ public class VBBuilder
         }
         ValidFileList.Add(GetCSTFile(cstFileList, "1"));
         Write(vbStrides, cstStrides, vbVertexCounts, ValidFileList, alias);
-        //ValidFileList.Dump();
-        //vbStrides.Dump("VB Strides");
-        //cstStrides.Dump("CST Strides");
     }
 
     private void Write(

@@ -1,9 +1,5 @@
 ﻿using NMC.Helpers;
-using NMC.Model;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NMC.Utils.VB;
 
@@ -11,10 +7,10 @@ public class VBVertexCountCollector
 {
     private StreamHelper streamBuilder = new StreamHelper();
 
-    /// <summary>
-    /// 获取VB文件中vertex count字段的值
-    /// </summary>
-    public Dictionary<string, string> GetVBVertexCount(string frameAnalysis, Dictionary<string, List<string>> vbFiles)
+    public Dictionary<string, string> GetVBVertexCount(
+        string frameAnalysis,
+        Dictionary<string, List<string>> vbFiles
+    )
     {
         Log.Info("收集 VB 文件的顶点数");
         Dictionary<string, string> vertexCounts = new Dictionary<string, string>();
