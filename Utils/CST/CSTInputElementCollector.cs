@@ -34,8 +34,8 @@ public class CSTInputElementCollector
 
         Dictionary<string, string> blendFormatMap = new Dictionary<string, string>()
         {
-            { "BLENDERWEIGHTS", "R32G32B32A32_FLOAT" },
-            { "BLENDERINDICES", "R32G32B32A32_UINT" }
+            { "BLENDWEIGHTS", "R32G32B32A32_FLOAT" },
+            { "BLENDINDICES", "R32G32B32A32_UINT" }
         };
 
         foreach (var attributeName in blendFormatMap.Keys)

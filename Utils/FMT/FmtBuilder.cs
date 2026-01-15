@@ -7,21 +7,15 @@ using System.Windows;
 
 namespace NMC.Utils.FMT;
 
-public enum FmtState
-{
-
-}
-
 public class FmtBuilder
 {
-    private FmtFixer fmtFixer;
+    private FmtFixer? fmtFixer;
     private Dictionary<string, string> vbStrides;
     private Dictionary<string, string> cstStrides;
     private List<Dictionary<string, List<string>>> vbInputElementList;
     private List<Dictionary<string, List<string>>> cstInputElementList;
     private Dictionary<string, List<string>> vbBufFiles;
     private Dictionary<string, List<string>> ibTxtFiles;
-    private Dictionary<string, List<string>> ibBufFiles;
     private string frameAnalysisPath;
 
     public FmtBuilder(
@@ -31,7 +25,6 @@ public class FmtBuilder
         List<Dictionary<string, List<string>>> cstInputElementList,
         Dictionary<string, List<string>> vbBufFiles,
         Dictionary<string, List<string>> ibTxtFiles,
-        Dictionary<string, List<string>> ibBufFiles,
         string frameAnalysisPath
         )
     {
@@ -41,7 +34,6 @@ public class FmtBuilder
         this.cstInputElementList = cstInputElementList;
         this.vbBufFiles = vbBufFiles;
         this.ibTxtFiles = ibTxtFiles;
-        this.ibBufFiles = ibBufFiles;
         this.frameAnalysisPath = frameAnalysisPath;
     }
 
@@ -57,30 +49,15 @@ public class FmtBuilder
         string stride = GetTotalStride(totalInputElementList);
         Dictionary<string, string> alignedByteOffsetMap = CalcAlignedByteOffset(totalInputElementList);
         totalInputElementList = RebuildAlignedByteOffset(totalInputElementList, alignedByteOffsetMap);
-        totalInputElementList = AddElementIndex(totalInputElementList);
-        totalInputElementList = AddSpace(totalInputElementList);
+        AddElementIndex(ref totalInputElementList);
+        AddSpace(ref totalInputElementList);
         totalInputElementList = [.. GetIBFormat(), .. totalInputElementList];
         totalInputElementList.Insert(0, $"stride: {stride}");
 
         return totalInputElementList;
     }
 
-    private List<string> AddSpace(List<string> totalInputElementList)
-    {
-        List<string> tempList = new List<string>();
-        tempList.AddRange(totalInputElementList);
-        for (int i = 0; i < tempList.Count; i++)
-        {
-            if (tempList[i].Contains("element[") || tempList[i].Contains("SemanticName: "))
-            {
-                continue;
-            }
-
-            tempList[i] = $"  {tempList[i]}";
-        }
-
-        return tempList;
-    }
+    
 
     private List<string> MergeInputElement(List<Dictionary<string, List<string>>> vbInputElementList, List<Dictionary<string, List<string>>> cstInputElementList)
     {
@@ -98,6 +75,14 @@ public class FmtBuilder
             foreach (var cstFile in fileElementMap.Keys)
             {
                 totalInputElementList.AddRange(fileElementMap[cstFile]);
+            }
+        }
+
+        for (int i = 0; i < totalInputElementList.Count; i++)
+        {
+            if (totalInputElementList[i].StartsWith("InputSlot: "))
+            {
+                totalInputElementList[i] = totalInputElementList[i].Replace(totalInputElementList[i], "InputSlot: 0");
             }
         }
 
@@ -170,25 +155,57 @@ public class FmtBuilder
         return totalStride.ToString();
     }
 
-    private List<string> AddElementIndex(List<string> totalInputElementList)
+    private void AddElementIndex(ref List<string> totalInputElementList)
     {
-        List<string> tempList = new List<string>();
-        tempList.AddRange(totalInputElementList);
-        for (int i = 0; i < tempList.Count / 7; i++)
-        {
-            if (i == 0)
-            {
-                tempList.Insert(0, $"element[{i}]:");
-                continue;
-            }
+        List<string> tempInputElemntList = new List<string>();
+        //totalInputElementList.Dump();
 
-            if (tempList[i].StartsWith("SemanticName: "))
+        for (int i = 0; i < totalInputElementList.Count; i++)
+        {
+            if (totalInputElementList[i].StartsWith("SemanticName: "))
             {
-                tempList.Insert(i + 7, $"element[{i}]:");
+                List<string> tempInputElementBlockList = new List<string>();
+                for (int j = i; j <= i + 6; j++)
+                {
+                    tempInputElementBlockList.Add(totalInputElementList[j]);
+                }
+                tempInputElementBlockList.Insert(0, "element[");
+
+                foreach (var inputElement in tempInputElementBlockList)
+                {
+                    tempInputElemntList.Add(inputElement);
+                }
             }
         }
 
-        return tempList;
+        int elementIndex = 0;
+        for (int i = 0; i < tempInputElemntList.Count; i++)
+        {
+            if (tempInputElemntList[i].StartsWith("element["))
+            {
+                tempInputElemntList[i] = tempInputElemntList[i].Replace(tempInputElemntList[i], $"element[{elementIndex}]:");
+                elementIndex++;
+            }
+        }
+
+        totalInputElementList = tempInputElemntList;
+    }
+
+    private void AddSpace(ref List<string> totalInputElementList)
+    {
+        List<string> tempList = new List<string>();
+        tempList.AddRange(totalInputElementList);
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            if (tempList[i].Contains("element["))
+            {
+                continue;
+            }
+
+            tempList[i] = $"  {tempList[i]}";
+        }
+
+        totalInputElementList = tempList;
     }
 
     private List<string> GetIBFormat()

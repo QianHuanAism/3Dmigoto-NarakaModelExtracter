@@ -10,8 +10,6 @@ public partial class FrameAnalysis : ObservableObject
 {
     [ObservableProperty]
     private string? _frameAnalysisPath;
-    [ObservableProperty]
-    private string? _outputPath;
-
+    
     public bool IsValid => string.IsNullOrEmpty(FrameAnalysisPath) || !Directory.Exists(FrameAnalysisPath);
 }

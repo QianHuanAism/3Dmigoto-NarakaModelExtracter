@@ -19,7 +19,7 @@ public class ModelExtractionAssertionService : IModelExtractionAssertionService
     /// <param name="frameAnalysis"><see cref="FrameAnalysis"/>, 存储了FrameAnalysis文件夹的路径以及判断文件夹是否存在</param>
     /// <param name="drawIBList"><see cref="ObservableCollection{DrawIB}"/>存储了用户输入的DrawIB</param>
     /// <returns>返回一个<see langword="bool"/>值, 如果返回值为<see langword="true"/>, 则表示断言通过可以提取, 反之亦然</returns>
-    public bool CanExtract(FrameAnalysis frameAnalysis, ObservableCollection<DrawIB> drawIBList)
+    public bool CanExtract(FrameAnalysis frameAnalysis, ObservableCollection<DrawIB> drawIBList, Output output)
     {
         if (drawIBList.Count <= 0)
         {
@@ -58,10 +58,9 @@ public class ModelExtractionAssertionService : IModelExtractionAssertionService
             return false;
         }
 
-        if (string.IsNullOrEmpty(frameAnalysis.OutputPath) || !Directory.Exists(frameAnalysis.OutputPath))
+        if (string.IsNullOrEmpty(output.OutputPath))
         {
-            MessageHelper.Show("请选择正确输出文件夹!");
-            Log.Info(" FrameAnalysisPath 为空或不存在, 提取结束!");
+            MessageHelper.Show("请选择输出文件夹!");
             return false;
         }
 

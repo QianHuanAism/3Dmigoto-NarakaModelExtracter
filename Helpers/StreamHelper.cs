@@ -12,4 +12,5 @@ public record StreamHelper(FileMode fileMode = FileMode.Open, FileAccess fileAcc
     {
         return new FileStream(filePath, fileMode, fileAccess);
     }
+
 }

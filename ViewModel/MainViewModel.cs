@@ -17,6 +17,7 @@ public partial class MainViewModel : ObservableObject
 {
     public ObservableCollection<DrawIB> DrawIBList { get; } = new ObservableCollection<DrawIB>();
     public FrameAnalysis FrameAnalysis { get; } = new FrameAnalysis();
+    public Output Output { get; } = new Output();
     private IModelExtractionService? _extractionService;
     private IModelExtractionAssertionService? _extractionAssertionService;
 
@@ -27,24 +28,24 @@ public partial class MainViewModel : ObservableObject
     private void ExtractModel()
     {
         // XXX: 仅为测试用例, 实际发布时会注释掉
-        ExtractTestCode();
+        //ExtractTestCode();
         Log.Info("-", 66);
         Log.Info("模型提取开始");
         Log.Info($"FrameAnalysis文件夹路径: {FrameAnalysis.FrameAnalysisPath}");
 
         _extractionAssertionService = new ModelExtractionAssertionService();
         // 如果断言不通过, 则直接结束提取
-        if (!_extractionAssertionService.CanExtract(FrameAnalysis, DrawIBList))
+        if (!_extractionAssertionService.CanExtract(FrameAnalysis, DrawIBList, Output))
         {
             Log.Info("模型提取失败, 提取逻辑结束");
             return;
         }
         
-        _extractionService = new ModelExtractionService(FrameAnalysis.FrameAnalysisPath!);
+        _extractionService = new ModelExtractionService(FrameAnalysis.FrameAnalysisPath!, Output.OutputPath);
         foreach (var drawIB in DrawIBList)
         {
             Log.Info($"当前DrawIB: {drawIB.IBHash}");
-            _extractionService.Extract(drawIB.IBHash);
+            _extractionService.Extract(drawIB.IBHash, drawIB.Alias);
         }
     }
 
@@ -70,7 +71,7 @@ public partial class MainViewModel : ObservableObject
         OpenFolderDialog folderDialog = new OpenFolderDialog();
         if (folderDialog.ShowDialog() == true)
         {
-            FrameAnalysis.OutputPath = folderDialog.FolderName;
+            Output.OutputPath = folderDialog.FolderName;
         }
     }
 
@@ -92,6 +93,6 @@ public partial class MainViewModel : ObservableObject
             });
         }
 
-        FrameAnalysis.FrameAnalysisPath = @"E:\XXMI Launcher\GIMI\FrameAnalysis-2026-01-12-163352";
+        //FrameAnalysis.FrameAnalysisPath = @"E:\XXMI Launcher\GIMI\FrameAnalysis-2026-01-12-163352";
     }
 }
