@@ -81,7 +81,6 @@ public class ModelExtractionService : IModelExtractionService
         VBCollector vbCollector = new VBCollector();
         vbTxtFiles = vbCollector.CollectTxtVBFile(frameAnalysisPath!, ibDrawCallMap);
         vbBufFiles = vbCollector.CollectBufVBFile(frameAnalysisPath!, ibDrawCallMap);
-
         if (vbTxtFiles == null || vbBufFiles == null)
         {
             MessageHelper.Show(
@@ -173,7 +172,6 @@ public class ModelExtractionService : IModelExtractionService
             vbVertexCounts,
             ibHash
         );
-
         vbBuilder.BuildAndWriteVB(vbBufFiles, cstFileList, alias);
     }
 }

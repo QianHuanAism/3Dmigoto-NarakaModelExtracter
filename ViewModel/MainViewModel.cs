@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿//#define TEST
+
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using NMC.Core;
@@ -16,10 +18,15 @@ public partial class MainViewModel : ObservableObject
     public Output Output { get; } = new Output();
     private IModelExtractionService? _extractionService;
     private IModelExtractionAssertionService? _extractionAssertionService;
+    private TestHelper testHelper = new TestHelper();
 
     [RelayCommand]
     private void ExtractModel()
     {
+#if TEST
+        FrameAnalysis.FrameAnalysisPath = testHelper.ExtractTest(DrawIBList);
+        Output.OutputPath = "E:\\XXMI Launcher\\GIMI\\Model\\LanMangTest";
+#endif
         Log.Info("-", 66);
         Log.Info("模型提取开始");
         Log.Info($"FrameAnalysis文件夹路径: {FrameAnalysis.FrameAnalysisPath}");

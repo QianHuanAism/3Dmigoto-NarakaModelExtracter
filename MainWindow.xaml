@@ -100,33 +100,35 @@
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="*" Binding="{Binding IBHash}" Header="DrawIB">
-
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Padding" Value="5,0,0,0" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
 
                             <DataGridTextColumn.EditingElementStyle>
                                 <Style TargetType="TextBox">
                                     <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="Padding" Value="5,0,0,0" />
                                 </Style>
                             </DataGridTextColumn.EditingElementStyle>
                         </DataGridTextColumn>
 
                         <DataGridTextColumn Width="*" Binding="{Binding Alias}" Header="Alias">
+                            <DataGridTextColumn.EditingElementStyle>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="Padding" Value="5,0,0,0" />
+                                </Style>
+                            </DataGridTextColumn.EditingElementStyle>
 
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Padding" Value="5,0,0,0" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
-
-                            <DataGridTextColumn.EditingElementStyle>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTextColumn.EditingElementStyle>
                         </DataGridTextColumn>
 
                     </DataGrid.Columns>

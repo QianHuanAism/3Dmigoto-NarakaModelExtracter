@@ -5,6 +5,8 @@ namespace NMC.Utils.VB;
 
 public class VBCollector
 {
+    private const int MaxVBSlot = 2;
+
     public Dictionary<string, List<string>>? CollectTxtVBFile(
         string frameAnalysis,
         Dictionary<string, List<string>> ibDrawCallMap
@@ -21,8 +23,12 @@ public class VBCollector
                 {
                     if (file.Contains($"{drawCall}-vb") && Path.GetExtension(file).Equals(".txt"))
                     {
-                        vbFileList.Add(Path.GetFileName(file));
-                        Log.Info($"绘制调用: {drawCall} --> {Path.GetFileName(file)}");
+                        string slotIndex = Path.GetFileName(file).Split("-vb")[1].Split("=")[0];
+                        if (int.Parse(slotIndex) <= MaxVBSlot)
+                        {
+                            vbFileList.Add(Path.GetFileName(file));
+                            Log.Info($"绘制调用: {drawCall} --> {Path.GetFileName(file)}");
+                        }
                     }
                 }
 
@@ -57,8 +63,12 @@ public class VBCollector
                 {
                     if (file.Contains($"{drawCall}-vb") && Path.GetExtension(file).Equals(".buf"))
                     {
-                        vbFileList.Add(Path.GetFileName(file));
-                        Log.Info($"绘制调用: {drawCall} --> {Path.GetFileName(file)}");
+                        string slotIndex = Path.GetFileName(file).Split("-vb")[1].Split("=")[0];
+                        if (int.Parse(slotIndex) <= 2)
+                        {
+                            vbFileList.Add(Path.GetFileName(file));
+                            Log.Info($"绘制调用: {drawCall} --> {Path.GetFileName(file)}");
+                        }
                     }
                 }
 
